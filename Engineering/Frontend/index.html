@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        GRP Structural Design Assistant
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div>
+
+        <h1>
+            GRP Structural Design Assistant
+        </h1>
+
+        <p>
+            Structural panel preliminary design calculator
+        </p>
+
+    </div>
+
+
+    <div class="header-badge">
+        Prototype
+    </div>
+
+</header>
+
+
+<main class="page">
+
+
+<!-- =====================================================
+     DESIGN INPUTS
+     ===================================================== -->
+
+<section class="card">
+
+    <div class="section-heading">
+
+        <h2>
+            Design inputs
+        </h2>
+
+        <p>
+            Define the structural arrangement, loading and
+            design factors.
+        </p>
+
+    </div>
+
+
+    <div class="grid">
+
+
+        <div class="field">
+
+            <label for="span">
+                Span
+                <span>m</span>
+            </label>
+
+            <input
+                id="span"
+                type="number"
+                value="2.0"
+                min="0.001"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="tributary-width">
+                Tributary width
+                <span>m</span>
+            </label>
+
+            <input
+                id="tributary-width"
+                type="number"
+                value="1.0"
+                min="0.001"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="permanent-load">
+                Permanent load
+                <span>N/m²</span>
+            </label>
+
+            <input
+                id="permanent-load"
+                type="number"
+                value="0"
+                min="0"
+                step="10"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="imposed-load">
+                Imposed load
+                <span>N/m²</span>
+            </label>
+
+            <input
+                id="imposed-load"
+                type="number"
+                value="2000"
+                min="0"
+                step="10"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="gamma-g">
+                γG
+            </label>
+
+            <input
+                id="gamma-g"
+                type="number"
+                value="1.35"
+                min="0.001"
+                step="0.05"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="gamma-q">
+                γQ
+            </label>
+
+            <input
+                id="gamma-q"
+                type="number"
+                value="1.50"
+                min="0.001"
+                step="0.05"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="support-condition">
+                Support condition
+            </label>
+
+            <select id="support-condition">
+
+                <option value="simply_supported">
+                    Simply supported
+                </option>
+
+                <option value="fixed_fixed">
+                    Fixed-fixed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="allowable-stress">
+                Allowable stress
+                <span>MPa</span>
+            </label>
+
+            <input
+                id="allowable-stress"
+                type="number"
+                value="240"
+                min="0.001"
+                step="1"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="allowable-deflection">
+                Allowable deflection
+                <span>mm</span>
+            </label>
+
+            <input
+                id="allowable-deflection"
+                type="number"
+                value="6.0"
+                min="0.001"
+                step="0.1"
+            >
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MATERIAL
+     ===================================================== -->
+
+<section class="card">
+
+    <div class="section-heading">
+
+        <h2>
+            Material
+        </h2>
+
+        <p>
+            Select a material from the engineering
+            reference library.
+        </p>
+
+    </div>
+
+
+    <div class="field">
+
+        <label for="material">
+            Material
+        </label>
+
+        <select id="material">
+
+            <option value="">
+                Loading materials...
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div
+        id="material-info"
+        class="info-panel"
+    ></div>
+
+</section>
+
+
+<!-- =====================================================
+     PROFILE
+     ===================================================== -->
+
+<section class="card">
+
+    <div class="section-heading">
+
+        <h2>
+            Profile
+        </h2>
+
+        <p>
+            Select the section type and define its
+            dimensions.
+        </p>
+
+    </div>
+
+
+    <div class="field">
+
+        <label for="profile-type">
+            Profile type
+        </label>
+
+        <select id="profile-type">
+
+            <option value="">
+                Loading profiles...
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- Rectangular/custom panel section -->
+
+    <div
+        id="rectangular-inputs"
+        class="grid"
+    >
+
+        <div class="field">
+
+            <label for="width">
+                Width
+                <span>m</span>
+            </label>
+
+            <input
+                id="width"
+                type="number"
+                value="1.0"
+                min="0.001"
+                step="0.001"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="thickness">
+                Thickness
+                <span>m</span>
+            </label>
+
+            <input
+                id="thickness"
+                type="number"
+                value="0.05"
+                min="0.001"
+                step="0.001"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- Manufacturer profile -->
+
+    <div
+        id="manufacturer-profile-inputs"
+        class="hidden"
+    >
+
+        <div class="field">
+
+            <label for="profile">
+                Manufacturer profile
+            </label>
+
+            <select id="profile">
+
+                <option value="">
+                    Select profile
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="profile-info"
+            class="info-panel"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CALCULATION ACTION
+     ===================================================== -->
+
+<section class="actions">
+
+    <button
+        id="calculate-button"
+        class="primary-button"
+        type="button"
+    >
+        Run calculation
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     ERROR MESSAGE
+     ===================================================== -->
+
+<div
+    id="error"
+    class="error hidden"
+    role="alert"
+></div>
+
+
+<!-- =====================================================
+     RESULTS
+     ===================================================== -->
+
+<section
+    id="results"
+    class="card results-card hidden"
+>
+
+
+    <div class="results-header">
+
+        <div>
+
+            <h2>
+                Calculation result
+            </h2>
+
+            <p id="result-summary"></p>
+
+        </div>
+
+
+        <div
+            id="result-status"
+            class="status"
+        ></div>
+
+    </div>
+
+
+    <!-- Main result cards -->
+
+    <div class="result-grid">
+
+
+        <div class="result-item">
+
+            <span>
+                Governing check
+            </span>
+
+            <strong id="governing-check"></strong>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span>
+                Governing utilisation
+            </span>
+
+            <strong id="governing-utilisation"></strong>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span>
+                Calculation ID
+            </span>
+
+            <strong id="calculation-id"></strong>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         UTILISATION SUMMARY
+         ================================================= -->
+
+    <div class="result-section">
+
+        <h3>
+            Utilisation
+        </h3>
+
+
+        <div class="result-grid">
+
+
+            <div class="result-item">
+
+                <span>
+                    ULS stress utilisation
+                </span>
+
+                <strong id="uls-utilisation">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <span>
+                    SLS deflection utilisation
+                </span>
+
+                <strong id="sls-utilisation">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <span>
+                    Governing utilisation
+                </span>
+
+                <strong id="governing-utilisation-detail">
+                    —
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CALCULATION DETAILS
+         ================================================= -->
+
+    <div class="result-section">
+
+        <h3>
+            Calculation details
+        </h3>
+
+        <div
+            id="calculation-details"
+            class="details-panel"
+        ></div>
+
+    </div>
+
+
+    <!-- =================================================
+         MATERIAL STATUS
+         ================================================= -->
+
+    <div class="result-section">
+
+        <h3>
+            Material status
+        </h3>
+
+        <div
+            id="result-material-status"
+            class="details-panel"
+        ></div>
+
+    </div>
+
+
+    <!-- =================================================
+         PROFILE SOURCE
+         ================================================= -->
+
+    <div class="result-section">
+
+        <h3>
+            Profile source
+        </h3>
+
+        <div
+            id="result-profile-source"
+            class="details-panel"
+        ></div>
+
+    </div>
+
+
+    <!-- =================================================
+         ASSUMPTIONS
+         ================================================= -->
+
+    <div class="result-section">
+
+        <h3>
+            Assumptions
+        </h3>
+
+        <ul
+            id="assumptions"
+            class="result-list"
+        ></ul>
+
+    </div>
+
+
+    <!-- =================================================
+         WARNINGS
+         ================================================= -->
+
+    <div class="result-section">
+
+        <h3>
+            Warnings
+        </h3>
+
+        <ul
+            id="warnings"
+            class="result-list warning-list"
+        ></ul>
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+    <p>
+        GRP Structural Design Assistant —
+        preliminary engineering prototype.
+    </p>
+
+    <p>
+        Material and manufacturer data must be validated
+        against current documentation before engineering use.
+    </p>
+
+</footer>
+
+
+<script src="/app.js"></script>
+
+</body>
+
+</html>
